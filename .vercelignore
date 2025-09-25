@@ -4,3 +4,4 @@ __backup/
 src.__now_*/
 src.__snap_*/
 src.__pre_*/
+src/app/api/auth/__disabled/
