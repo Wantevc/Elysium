@@ -1,7 +1,4 @@
-﻿src.__*/
-__backup/
-*.backup.*
-src.__now_*/
-src.__snap_*/
-src.__pre_*/
-src/app/api/auth/__disabled/
+﻿ARCHIVE/
+src/app/api/**/route.backup.ts
+src/**/auth.disabled.ts
+src/app/app/connect/page.disabled.tsx
