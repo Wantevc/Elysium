@@ -1,0 +1,53 @@
+{/* Instagram (optioneel) */}
+<section className="p-4 rounded-2xl bg-white shadow space-y-3">
+  <h2 className="text-lg font-medium">Instagram post (foto)</h2>
+  <p className="text-sm text-gray-600">
+    Vereist permissies: <code>instagram_basic</code> + <code>instagram_content_publish</code> en een gekoppelde IG Business.
+  </p>
+
+  <div className="flex items-center gap-2">
+    <button
+      onClick={async () => {
+        if (!selectedPageId) return;
+        const r = await fetch(`/api/meta/ig_account?page_id=${encodeURIComponent(selectedPageId)}`);
+        const j = await r.json();
+        alert(JSON.stringify(j, null, 2));
+      }}
+      disabled={!selectedPageId}
+      className="px-3 py-2 rounded-2xl shadow bg-white hover:bg-gray-100 disabled:opacity-50"
+    >
+      Check IG account
+    </button>
+  </div>
+
+  <div className="grid gap-2">
+    <input
+      placeholder="Afbeeldings-URL (https://...)"
+      className="w-full p-3 rounded-xl border"
+      onChange={(e) => (window as any).__igImageUrl = e.target.value}
+    />
+    <textarea
+      placeholder="Caption (optioneel)"
+      className="w-full min-h-[70px] p-3 rounded-xl border"
+      onChange={(e) => (window as any).__igCaption = e.target.value}
+    />
+    <button
+      onClick={async () => {
+        if (!selectedPageId) return;
+        const imageUrl = (window as any).__igImageUrl || "";
+        const caption = (window as any).__igCaption || "";
+        const r = await fetch("/api/meta/ig_post_photo", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pageId: selectedPageId, imageUrl, caption }),
+        });
+        const j = await r.json();
+        alert(JSON.stringify(j, null, 2));
+      }}
+      disabled={!selectedPageId}
+      className="px-3 py-2 rounded-2xl shadow bg-gray-900 text-white disabled:opacity-50"
+    >
+      Post foto naar Instagram
+    </button>
+  </div>
+</section>

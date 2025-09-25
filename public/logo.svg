@@ -1,0 +1,11 @@
+<!-- Minimal A-monogram in goud, massief (makkelijk te extruderen) -->
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F1DFAD"/>
+      <stop offset="1" stop-color="#D9BF7A"/>
+    </linearGradient>
+  </defs>
+  <!-- Massieve A (zonder gat; extrude is dan simpel en mooi) -->
+  <path d="M100 18 L165 182 L142 182 L123 134 L77 134 L58 182 L35 182 L100 18 Z" fill="url(#gold)"/>
+</svg>

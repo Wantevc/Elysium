@@ -1,0 +1,163 @@
+/* ================= Neon Mist — Design Tokens ================= */
+:root{
+  /* Base */
+  --bg:#0a0c10;           /* bijna zwart met blauw tint */
+  --panel:#0f1218;        /* glas donkere laag */
+  --panel-2:#111520;
+  --text:#eef2f8;
+  --muted:#9aa3b2;
+
+  /* Accent (neon cyan + violet) */
+  --pri:#5eead4;          /* mint/cyan gloed */
+  --pri-2:#22d3ee;        /* cyan */
+  --violet:#a78bfa;       /* violet edge */
+  --ring:rgba(94,234,212,.28);
+
+  /* Layout */
+  --radius:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.5);
+  --max:1180px;
+}
+
+/* =============== Global =============== */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font:15.5px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  color:var(--text);
+  background:
+    radial-gradient(1100px 520px at 10% -10%, rgba(34,211,238,.10), transparent 50%),
+    radial-gradient(1200px 620px at 100% 0%, rgba(167,139,250,.10), transparent 55%),
+    var(--bg);
+}
+
+/* =============== Shell =============== */
+.container{max-width:var(--max); margin:0 auto; padding:28px 20px}
+.header{
+  position:sticky; top:0; z-index:20;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:14px 20px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  background:
+    linear-gradient(180deg, rgba(34,211,238,.10), rgba(167,139,250,.06) 60%, transparent);
+  backdrop-filter:saturate(1.05) blur(8px);
+}
+.brand{display:flex; align-items:center; gap:10px}
+.brandDot{width:10px; height:10px; border-radius:999px; background:var(--pri);
+  box-shadow:0 0 10px var(--pri), 0 0 28px rgba(34,211,238,.35)}
+.brandTitle{font-weight:800; letter-spacing:.25px}
+
+/* =============== Page titles =============== */
+.pageTitle{
+  font-size:clamp(28px,4vw,42px); line-height:1.15; margin:26px 0 6px;
+  background:linear-gradient(90deg, var(--pri) 0%, var(--violet) 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 0 18px rgba(94,234,212,.25);
+}
+.pageDesc{color:#cfd6e2; margin:0 0 18px}
+
+/* =============== Cards (glas + neon edge) =============== */
+.card{
+  position:relative; overflow:hidden;
+  border-radius:var(--radius);
+  border:1px solid rgba(255,255,255,.08);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02)),
+    linear-gradient(180deg, var(--panel), var(--panel-2) 60%);
+  box-shadow: var(--shadow);
+  padding:20px;
+  transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+.card::before{ /* subtiele randgloed */
+  content:""; position:absolute; inset:-2px;
+  border-radius:inherit; pointer-events:none;
+  background:
+    radial-gradient(600px 240px at 10% -10%, rgba(94,234,212,.25), transparent 40%),
+    radial-gradient(600px 240px at 100% 0%, rgba(167,139,250,.22), transparent 40%);
+  opacity:.55; mix-blend-mode:lighten;
+}
+.card:hover{
+  transform:translateY(-3px);
+  border-color:rgba(94,234,212,.35);
+  box-shadow:0 16px 44px rgba(94,234,212,.12), var(--shadow);
+}
+
+.cardTitle{
+  font-weight:800; margin:0 0 8px;
+  color:#eafdf9;
+  text-shadow:0 0 14px rgba(94,234,212,.35);
+}
+.subtle{color:var(--muted)}
+
+/* Section header */
+.sectionHead{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:6px}
+.sectionTitle{
+  font-weight:800; letter-spacing:.2px; color:#eafdf9; font-size:20px;
+  text-shadow:0 0 10px rgba(94,234,212,.25)
+}
+
+/* =============== Buttons =============== */
+.btn{
+  border:1px solid rgba(255,255,255,.12);
+  background:linear-gradient(180deg,#151a23,#10151c);
+  color:var(--text);
+  padding:10px 14px; border-radius:12px; font-weight:700; letter-spacing:.2px;
+  cursor:pointer; box-shadow:var(--shadow);
+  transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease;
+}
+.btn:hover{ transform:translateY(-1px); border-color:rgba(255,255,255,.25);
+  box-shadow:0 10px 28px rgba(167,139,250,.15), var(--shadow) }
+
+.btn--primary{
+  color:#051c1a;
+  background:
+    linear-gradient(180deg, rgba(94,234,212,.35), rgba(34,211,238,.22)),
+    linear-gradient(180deg,#0f1b20,#0b1116);
+  border-color:rgba(94,234,212,.45);
+  text-shadow:0 0 8px rgba(94,234,212,.45);
+}
+.btn--primary:hover{
+  box-shadow:0 12px 36px rgba(94,234,212,.25), var(--shadow);
+  border-color:rgba(94,234,212,.65);
+}
+.btn--danger{ border-color:rgba(255,99,99,.4); color:#fecaca; }
+.btn:disabled{opacity:.55; cursor:not-allowed}
+
+/* =============== Forms =============== */
+.label{display:block; font-weight:700; color:#e6edf7; margin:8px 0 6px}
+.input,.select,.textarea{
+  width:100%;
+  background:linear-gradient(180deg,#0d1219,#0b0f15);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--text); border-radius:12px;
+  padding:12px 14px; outline:none;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+.input::placeholder,.textarea::placeholder{color:#7f8a9b}
+.textarea{min-height:100px; resize:vertical}
+.input:focus,.select:focus,.textarea:focus{
+  border-color:rgba(94,234,212,.55);
+  box-shadow:0 0 0 4px var(--ring);
+}
+
+/* Pills (worden via buttons gebouwd in je pagina’s) */
+.pill{border-radius:9999px; padding:6px 12px; font-size:14px}
+
+/* =============== Grids & tables =============== */
+.grid-2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+.grid-3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:18px}
+@media (max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+.table{width:100%; border-collapse:collapse; font-size:14px}
+.table th{font-weight:700; text-align:left; padding:.6rem .75rem; color:#e6edf7}
+.table td{padding:.6rem .75rem; vertical-align:top; border-top:1px solid rgba(255,255,255,.08)}
+.table tr:hover td{background:rgba(255,255,255,.02)}
+
+/* =============== Footer =============== */
+.footer{
+  margin:28px auto; max-width:var(--max); padding-top:12px;
+  color:#8e98a8; font-size:12.5px; border-top:1px solid rgba(255,255,255,.06);
+  display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap;
+}
+.footer strong{color:var(--pri); font-weight:700}

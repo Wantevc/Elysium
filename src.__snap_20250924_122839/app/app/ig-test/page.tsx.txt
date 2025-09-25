@@ -1,0 +1,109 @@
+"use client";
+import React, { useEffect, useState } from "react";
+
+async function jfetch<T>(url: string, init?: RequestInit): Promise<T> {
+  const r = await fetch(url, { cache: "no-store", ...init });
+  const j = await r.json();
+  if (!r.ok) throw j;
+  return j as T;
+}
+
+type IgCheckResp = { ok: boolean; step?: string; data?: any; error?: string };
+type IgPostResp = { ok: boolean; step?: string; igUserId?: string; mediaId?: string; error?: string };
+
+export default function IgTestPage() {
+  const [pageId, setPageId] = useState<string>("");
+  const [status, setStatus] = useState<string>("…");
+  const [igResp, setIgResp] = useState<any>(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [caption, setCaption] = useState("");
+  const [postResp, setPostResp] = useState<any>(null);
+  const [err, setErr] = useState<string | null>(null);
+
+  // Haal je eerder gekozen Page ID uit localStorage (van /app/connect)
+  useEffect(() => {
+    const saved = localStorage.getItem("selected_page_id") || "";
+    setPageId(saved);
+  }, []);
+
+  async function checkAuth() {
+    try {
+      const a = await jfetch<{ loggedIn: boolean; hasToken: boolean }>("/api/meta/auth");
+      setStatus(JSON.stringify(a));
+    } catch {
+      setStatus("auth check failed");
+    }
+  }
+
+  async function checkIg() {
+    setErr(null); setIgResp(null);
+    if (!pageId) { setErr("Geen pageId. Ga naar /app/connect en Save selection."); return; }
+    try {
+      const r = await jfetch<IgCheckResp>(`/api/meta/ig_account?page_id=${encodeURIComponent(pageId)}`);
+      setIgResp(r);
+    } catch (e: any) {
+      setErr(e?.error || e?.message || "IG-check mislukt");
+    }
+  }
+
+  async function postPhoto() {
+    setErr(null); setPostResp(null);
+    if (!pageId) { setErr("Geen pageId. Ga naar /app/connect en Save selection."); return; }
+    if (!imageUrl) { setErr("Vul een geldige afbeelding-URL in."); return; }
+    try {
+      const r = await jfetch<IgPostResp>("/api/meta/ig_post_photo", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId, imageUrl, caption }),
+      });
+      setPostResp(r);
+      if (!r.ok) setErr(r.error || `Mislukt bij stap: ${r.step}`);
+    } catch (e: any) {
+      setErr(e?.error || e?.message || "Posten mislukt");
+    }
+  }
+
+  return (
+    <div className="min-h-screen p-6 md:p-10 bg-gray-50">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <h1 className="text-2xl font-semibold">Instagram Test</h1>
+
+        <section className="p-4 rounded-2xl bg-white shadow space-y-2">
+          <div className="text-sm text-gray-700">Auth: {status}</div>
+          <button onClick={checkAuth} className="px-3 py-2 rounded-2xl shadow bg-white hover:bg-gray-100 text-sm">Check auth</button>
+        </section>
+
+        <section className="p-4 rounded-2xl bg-white shadow space-y-3">
+          <h2 className="text-lg font-medium">1) IG account check</h2>
+          <div className="grid gap-2">
+            <input
+              value={pageId}
+              onChange={(e) => setPageId(e.target.value)}
+              placeholder="Page ID (of laat staan; komt uit localStorage)"
+              className="w-full p-3 rounded-xl border"
+            />
+            <button onClick={checkIg} className="px-3 py-2 rounded-2xl shadow bg-white hover:bg-gray-100">Check IG account</button>
+          </div>
+          {igResp && (
+            <pre className="text-xs bg-gray-50 border rounded-xl p-3 overflow-auto">{JSON.stringify(igResp, null, 2)}</pre>
+          )}
+        </section>
+
+        <section className="p-4 rounded-2xl bg-white shadow space-y-3">
+          <h2 className="text-lg font-medium">2) Foto posten naar IG</h2>
+          <p className="text-sm text-gray-600">Vereist app-permissies: <code>instagram_basic</code> + <code>instagram_content_publish</code>. Page moet IG Business gelinkt hebben.</p>
+          <div className="grid gap-2">
+            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Afbeeldings-URL (https://...)" className="w-full p-3 rounded-xl border" />
+            <textarea value={caption} onChange={(e) => setCaption(e.target.value)} placeholder="Caption (optioneel)" className="w-full min-h-[70px] p-3 rounded-xl border" />
+            <button onClick={postPhoto} className="px-3 py-2 rounded-2xl shadow bg-gray-900 text-white">Post foto</button>
+          </div>
+          {postResp && (
+            <pre className="text-xs bg-gray-50 border rounded-xl p-3 overflow-auto">{JSON.stringify(postResp, null, 2)}</pre>
+          )}
+        </section>
+
+        {err && <div className="rounded-xl border p-3 text-sm bg-red-50 border-red-200 text-red-800">{err}</div>}
+      </div>
+    </div>
+  );
+}

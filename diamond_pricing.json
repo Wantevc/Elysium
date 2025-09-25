@@ -1,0 +1,26 @@
+{
+  "currency": "EUR",
+  "consumption": { "image": 7, "text": 1 },
+  "plans": [
+    { "id": "basic", "name": "Abonnement Basis", "price": 10, "credits": 100, "features": [], "stripe_price_id": "" },
+    { "id": "premium", "name": "Abonnement Premium", "price": 20, "credits": 250, "features": [], "stripe_price_id": "" },
+    {
+      "id": "diamond",
+      "name": "Abonnement Diamond",
+      "price": 30,
+      "credits": 400,
+      "features": ["team_access", "exclusive_templates"],
+      "team": { "included_seats": 3, "max_seats": 5, "additional_seat_price": 5 },
+      "stripe_price_id": ""
+    }
+  ],
+  "topups": [
+    { "id": "pack_small", "name": "Extra Pack (50)", "price": 5, "credits": 50, "stripe_price_id": "" },
+    { "id": "pack_large", "name": "Extra Pack Groot (120)", "price": 10, "credits": 120, "stripe_price_id": "" }
+  ],
+  "rules": {
+    "subscription_reset": { "period": "monthly", "rollover": false },
+    "topup_expiry": null,
+    "spend_order": ["subscription", "topup"]
+  }
+}

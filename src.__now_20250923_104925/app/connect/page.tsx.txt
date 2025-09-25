@@ -1,0 +1,72 @@
+"use client";
+<div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">{error}</div>
+)}
+{pages && pages.length === 0 && (
+<p className="text-sm text-gray-600">Geen Pages gevonden.</p>
+)}
+{pages && pages.length > 0 && (
+<ul className="space-y-2">
+{pages.map((p) => (
+<li key={p.id} className="flex items-center justify-between gap-3 p-3 rounded-xl border bg-gray-50">
+<label className="flex items-center gap-3">
+<input
+type="radio"
+name="page"
+value={p.id}
+checked={selectedPageId === p.id}
+onChange={() => setSelectedPageId(p.id)}
+/>
+<span className="font-medium">{p.name || `Page ${p.id}`}</span>
+<span className="text-xs text-gray-500">ID: {p.id}</span>
+{p.instagram_business_account?.id && (
+<span className="text-xs text-gray-500">IG: {p.instagram_business_account.id}</span>
+)}
+</label>
+{p.access_token && (
+<span className="text-[10px] text-gray-400">token✓</span>
+)}
+</li>
+))}
+</ul>
+)}
+<div className="flex items-center gap-3">
+<button onClick={saveSelection} disabled={!selectedPageId} className="px-3 py-2 rounded-2xl shadow bg-white hover:bg-gray-100 disabled:opacity-50">Save selection</button>
+<button onClick={getPageToken} disabled={!selectedPageId} className="px-3 py-2 rounded-2xl shadow bg-white hover:bg-gray-100 disabled:opacity-50">Get Page token</button>
+{pageToken && (
+<span className="text-xs truncate max-w-[50%]" title={pageToken}>token: {pageToken}</span>
+)}
+</div>
+</section>
+
+
+{/* Post test */}
+<section className="p-4 rounded-2xl bg-white shadow space-y-3">
+<h2 className="text-lg font-medium">Post test (optioneel)</h2>
+<div className="grid gap-2">
+<textarea
+value={postMsg}
+onChange={(e) => setPostMsg(e.target.value)}
+placeholder="Schrijf een korte statusupdate…"
+className="w-full min-h-[90px] p-3 rounded-xl border"
+/>
+<button onClick={submitPost} disabled={!selectedPageId || !postMsg.trim()} className="px-3 py-2 rounded-2xl shadow bg-gray-900 text-white disabled:opacity-50">Post naar Page</button>
+</div>
+{postRes && (
+<div className={`rounded-xl border p-3 text-sm ${postRes.ok ? "bg-green-50 border-green-200 text-green-800" : "bg-red-50 border-red-200 text-red-800"}`}>
+<pre className="whitespace-pre-wrap break-all">{JSON.stringify(postRes, null, 2)}</pre>
+{postRes?.permalink && (
+<a className="underline" href={postRes.permalink} target="_blank" rel="noreferrer">Bekijk post</a>
+)}
+</div>
+)}
+</section>
+
+
+{/* Dev info */}
+<section className="p-4 rounded-2xl bg-white shadow text-xs text-gray-500">
+<p>Tip: als Pages leeg blijft, controleer in Facebook Login for Business → Configurations dat je <code>Pages API</code> gebruikt en <code>pages_show_list</code> is toegestaan voor de geselecteerde Page(s). Soms moet je opnieuw inloggen met "See all" → selecteer Page → Continue.</p>
+</section>
+</div>
+</div>
+);
+}
