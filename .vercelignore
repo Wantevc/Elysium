@@ -2,3 +2,10 @@
 src/app/api/**/route.backup.ts
 src/**/auth.disabled.ts
 src/app/app/connect/page.disabled.tsx
+
+ARCHIVE/
+src.__*/
+__backup/
+src/app/api/auth/__disabled/
+**/*.backup.*
+**/*.disabled.*
