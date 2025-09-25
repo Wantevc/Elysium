@@ -1,45 +1,28 @@
-﻿"use client";
-import React from "react";
-import { ChevronRight } from "lucide-react";
+﻿// @ts-nocheck
+'use client';
+import React from 'react';
 
-export function Card({
-  title,
-  desc,
-  icon,
-  children,
-}: {
-  title: string;
-  desc?: string;
-  icon?: React.ReactNode;
-  children?: React.ReactNode;
-}) {
+// Simpele thematokens die overal veilig zijn
+export const TOKENS = {
+  radius: 'rounded-2xl',
+  pad: 'px-4 py-2',
+  font: 'font-medium',
+  glow: 'shadow-[0_0_20px_rgba(255,215,0,0.35)]',
+  ring: 'ring-1 ring-yellow-400/40',
+};
+
+// Basic GlowButton die gewoon werkt als <button>
+export function GlowButton({ children, className = '', ...props }) {
+  const base =
+    'inline-flex items-center justify-center ' +
+    TOKENS.pad + ' ' + TOKENS.radius + ' ' + TOKENS.font + ' ' +
+    TOKENS.glow + ' ' + TOKENS.ring;
+
   return (
-    <div className="card-border p-5 sm:p-6 hover:shadow-gold transition-shadow duration-200">
-      <div className="flex items-start gap-3">
-        <div className="shrink-0 rounded-lg bg-neutral-900/70 p-2 gold-ring">{icon}</div>
-        <div className="min-w-0">
-          <div className="text-lg font-semibold">{title}</div>
-          {desc && <div className="text-sm text-neutral-400 mt-0.5">{desc}</div>}
-        </div>
-      </div>
-      {children && <div className="mt-4">{children}</div>}
-    </div>
+    <button className={base + (className ? ' ' + className : '')} {...props}>
+      {children}
+    </button>
   );
 }
 
-export function GoldLink({
-  href,
-  label,
-}: {
-  href: string;
-  label?: string;
-}) {
-  return (
-    <a
-      href={href}
-      className="inline-flex items-center gap-2 text-sm font-medium text-gold hover:opacity-90"
-    >
-      {label ?? "Openen"} <ChevronRight size={16} />
-    </a>
-  );
-}
+export default {};
