@@ -1,0 +1,6 @@
+﻿src.__*/
+__backup/
+*.backup.*
+src.__now_*/
+src.__snap_*/
+src.__pre_*/

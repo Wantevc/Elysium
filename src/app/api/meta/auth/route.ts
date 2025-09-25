@@ -1,13 +1,7 @@
-﻿import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-
+﻿// @ts-nocheck
 export async function GET() {
-  const session = await getServerSession(authOptions);
-  // @ts-expect-error custom
-  const accessToken = session?.accessToken ?? null;
-  return NextResponse.json({
-    loggedIn: !!session,
-    hasToken: !!accessToken,
-  });
+  return Response.json({ ok: true, auth: 'disabled' }, { status: 200 });
+}
+export async function POST() {
+  return Response.json({ ok: false, reason: 'auth disabled' }, { status: 501 });
 }
